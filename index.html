@@ -55,6 +55,23 @@
             border-radius: 5px;
             background-color: #f1f1f1;
         }
+		.table-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f1f1f1;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #d4e1f1;
+        }
     </style>
 </head>
 <body>
@@ -166,6 +183,49 @@
             <p>Điểm quy đổi: <span id="converted"></span></p>
         </div>
     </div>
+	<div class="container table-container">
+		<h2 class="text-center">THÔNG TIN TUYỂN SINH ĐẠI HỌC CHÍNH QUY NĂM 2025 (DỰ KIẾN)</h2>
+		<div class="table-responsive">
+			<table class="table table-striped table-hover table-bordered">
+				<thead class="text-center">
+					<tr>
+						<th>TT</th>
+						<th>MÃ NGÀNH</th>
+						<th>TÊN NGÀNH</th>
+						<th>CHỈ TIÊU</th>
+						<th>TỔ HỢP XÉT TUYỂN</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr><td>1</td><td>7220201</td><td>Ngôn ngữ Anh</td><td>200</td><td>Nhóm 1</td></tr>
+					<tr><td>2</td><td>7340101</td><td>Quản trị kinh doanh</td><td>480</td><td>Nhóm 1</td></tr>
+					<tr><td>3</td><td>7340115</td><td>Marketing</td><td>240</td><td>Nhóm 1</td></tr>
+					<tr><td>4</td><td>7340121</td><td>Kinh doanh thương mại</td><td>420</td><td>Nhóm 1</td></tr>
+					<tr><td>5</td><td>7340201</td><td>Tài chính - Ngân hàng</td><td>240</td><td>Nhóm 2</td></tr>
+					<tr><td>6</td><td>7340204</td><td>Bảo hiểm</td><td>180</td><td>Nhóm 2</td></tr>
+					<tr><td>7</td><td>7340301</td><td>Kế toán</td><td>740</td><td>Nhóm 2</td></tr>
+					<tr><td>8</td><td>7340302</td><td>Kiểm toán</td><td>240</td><td>Nhóm 2</td></tr>
+					<tr><td>9</td><td>7510605</td><td>Logistics & Quản lý chuỗi cung ứng</td><td>240</td><td>Nhóm 2</td></tr>
+					<tr><td>10</td><td>7460108</td><td>Khoa học dữ liệu</td><td>240</td><td>Nhóm 2</td></tr>
+					<tr><td>11</td><td>7480102</td><td>Mạng máy tính & Truyền thông dữ liệu</td><td>180</td><td>Nhóm 2</td></tr>
+					<tr><td>12</td><td>7480103</td><td>Công nghệ kỹ thuật máy tính</td><td>180</td><td>Nhóm 2</td></tr>
+					<tr><td>13</td><td>7480201</td><td>Công nghệ thông tin</td><td>520</td><td>Nhóm 2</td></tr>
+					<tr><td>14</td><td>7510201</td><td>Công nghệ kỹ thuật cơ khí</td><td>240</td><td>Nhóm 3</td></tr>
+					<tr><td>15</td><td>7510203</td><td>Công nghệ kỹ thuật cơ điện tử</td><td>240</td><td>Nhóm 3</td></tr>
+					<tr><td>16</td><td>7510205</td><td>Công nghệ kỹ thuật ô tô</td><td>240</td><td>Nhóm 3</td></tr>
+					<tr><td>17</td><td>7510301</td><td>Công nghệ kỹ thuật điện, điện tử</td><td>240</td><td>Nhóm 3</td></tr>
+					<tr><td>18</td><td>7510302</td><td>CNKT điện tử - Viễn thông</td><td>240</td><td>Nhóm 3</td></tr>
+					<tr><td>19</td><td>7510303</td><td>CNKT điều khiển & tự động hóa</td><td>240</td><td>Nhóm 3</td></tr>
+					<tr><td>20</td><td>7540203</td><td>Công nghệ vật liệu dệt, may</td><td>60</td><td>Nhóm 3</td></tr>
+					<tr><td>21</td><td>7540204</td><td>Công nghệ dệt, may</td><td>240</td><td>Nhóm 3</td></tr>
+					<tr><td>22</td><td>7540101</td><td>Công nghệ thực phẩm</td><td>180</td><td>Nhóm 3</td></tr>
+					<tr><td>23</td><td>7540106</td><td>ĐBCL & An toàn thực phẩm</td><td>60</td><td>Nhóm 3</td></tr>
+					<tr><td>24</td><td>7810103</td><td>Quản trị dịch vụ du lịch & lữ hành</td><td>210</td><td>Nhóm 4</td></tr>
+					<tr><td>25</td><td>7810201</td><td>Quản trị khách sạn</td><td>210</td><td>Nhóm 4</td></tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -409,6 +469,7 @@
 			document.getElementById('group3').textContent = groupScores.group3.toFixed(2);
 			document.getElementById('group4').textContent = groupScores.group4.toFixed(2);
 
+			alert(`Tổng điểm xét tuyển:\nNhóm 1: ${groupScores.group1.toFixed(2)}\nNhóm 2: ${groupScores.group2.toFixed(2)}\nNhóm 3: ${groupScores.group3.toFixed(2)}\nNhóm 4: ${groupScores.group4.toFixed(2)}`);
 		}
 		
 		function resetForm() {
