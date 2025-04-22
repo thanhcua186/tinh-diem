@@ -75,6 +75,15 @@
                     <option value="hocBa">Xét điểm học bạ</option>
                 </select>
             </div>
+			
+			<!-- Cơ sở xét tuyển -->
+			<div class="mb-3">
+                <label for="registrationLocation" class="form-label">Chọn cơ sở xét tuyển</label>
+                <select id="registrationLocation" class="form-select" onchange="updateForm()">
+                    <option value="HaNoi">Cơ sở Hà Nội</option>
+                    <option value="NamDinh">Cơ sở Nam Định</option>
+                </select>
+            </div>
 
             <!-- Khu vực ưu tiên -->
             <div class="mb-3">
@@ -100,12 +109,31 @@
 					<option value="DT7">Đối tượng 7</option>
                 </select>
             </div>
+			
+			<!-- Chọn chứng chỉ tiếng Anh -->
+			<div class="mb-3">
+				<label for="englishCertificate" class="form-label">Chọn chứng chỉ tiếng Anh</label>
+				<select id="englishCertificate" class="form-select" onchange="updateEnglishOptions()">
+					<option value="none">Không có</option>
+					<option value="ielts">IELTS</option>
+					<option value="toefl">TOEFL iBT</option>
+					<option value="toeic">TOEIC (L&R&S&W)</option>
+				</select>
+			</div>
+
+			<!-- Chọn mức điểm của chứng chỉ -->
+			<div class="mb-3" id="certificateScoreBox" style="display: none;">
+				<label for="certificateScore" class="form-label">Chọn mức điểm</label>
+				<select id="certificateScore" class="form-select" onchange="applyEnglishScore()">
+					<option value="none">--Chọn chứng chỉ trước--</option>
+				</select>
+			</div>
 
             <!-- Nhập điểm các môn học -->
             <div id="subjectScores" class="mb-3">
                 <label class="form-label"><strong>Nhập điểm thi THPT (Nếu điểm lẻ thì nhập dấu phẩy (,) VD: 8,5 hoặc nhập 85)</strong></label>
                 <div class="row">
-                    <div class="col-md-4"><input type="number"  id="toan" class="form-control mb-2" placeholder="Toán"></div>
+                    <div class="col-md-4"><input type="number" id="toan" class="form-control mb-2" placeholder="Toán"></div>
                     <div class="col-md-4"><input type="number" id="ly" class="form-control mb-2" placeholder="Vật lý"></div>
                     <div class="col-md-4"><input type="number" id="hoa" class="form-control mb-2" placeholder="Hóa học"></div>
                     <div class="col-md-4"><input type="number" id="sinh" class="form-control mb-2" placeholder="Sinh học"></div>
@@ -119,11 +147,6 @@
                 </div>
             </div>
 
-            <!-- Nhập điểm đánh giá tư duy hoặc năng lực
-            <div id="evaluationScores" class="mb-3" style="display: none;">
-                <label class="form-label">Nhập điểm đánh giá</label>
-                <input type="number" class="form-control" placeholder="Nhập điểm">
-            </div>  -->
 	
             <!-- Nút tính điểm -->
             <div class="text-center mb-3">
@@ -154,11 +177,41 @@
                 if (isNaN(value) || value < 0) {
                     this.value = 0; // Nếu giá trị nhỏ hơn 0, đặt về 0
                 } else if (value > 10) {
-                    this.value = (value / 10).toFixed(2); // Nếu lớn hơn 10, đặt về 10
+                    this.value = (value / 10).toFixed(1); // Nếu lớn hơn 10, đặt về 10
                 }
             });
         });
+		
+		function applyEnglishScore() {
+			const selectedScore = document.getElementById("certificateScore").value;
+			const englishInput = document.getElementById("anh"); // ID đúng của ô nhập điểm Tiếng Anh
 
+			// Bảng quy đổi điểm Tiếng Anh
+			const conversionTable = {
+				"7.0": { convertedScore: 10, bonus: 0.5 },
+				"6.5": { convertedScore: 9.5, bonus: 0.4 },
+				"6.0": { convertedScore: 9.0, bonus: 0.3 },
+				"5.5": { convertedScore: 8.5, bonus: 0.2 },
+				"5.0": { convertedScore: 8.0, bonus: 0.1 },
+				"94": { convertedScore: 10, bonus: 0.5 },
+				"79": { convertedScore: 9.5, bonus: 0.4 },
+				"60": { convertedScore: 9.0, bonus: 0.3 },
+				"46": { convertedScore: 8.5, bonus: 0.2 },
+				"30": { convertedScore: 8.0, bonus: 0.1 },
+				"985": { convertedScore: 10, bonus: 0.5 },
+				"940": { convertedScore: 9.5, bonus: 0.4 },
+				"860": { convertedScore: 9.0, bonus: 0.3 },
+				"785": { convertedScore: 8.5, bonus: 0.2 },
+				"550": { convertedScore: 8.0, bonus: 0.1 }
+			};
+
+			if (conversionTable[selectedScore]) {
+				// Tự động nhập điểm Tiếng Anh theo bảng quy đổi
+				englishInput.value = conversionTable[selectedScore].convertedScore;
+			} else {
+				englishInput.value = ""; // Nếu không chọn chứng chỉ, ô nhập trống
+			}
+		}
 	
 		function updateForm() {
 			const selectionType = document.getElementById('selectionType').value;
@@ -179,7 +232,7 @@
 				convertedScore.style.display = 'none';
 			} else if (selectionType === 'hocBa') {
 				// Nếu là xét học bạ, hiển thị label in đậm: "Nhập điểm học bạ (Điểm tổng kết năm lớp 12 - Nếu điểm lẻ thì nhập dấu phẩy (,) VD: 8,5 hoặc nhập 85)"
-				subjectLabel.innerHTML = "<strong>Nhập điểm học bạ (Điểm tổng kết năm lớp 12)</strong>";
+				subjectLabel.innerHTML = "<strong>Nhập điểm học bạ (Điểm tổng kết năm lớp 12 - Nếu điểm lẻ thì nhập dấu phẩy (,) VD: 8,5 hoặc nhập 85)</strong>";
 				subjectScores.style.display = 'block';
 				evaluationScores.style.display = 'none';
 				resultScores.style.display = 'flex';
@@ -211,107 +264,97 @@
 
 			// Tính điểm khu vực ưu tiên
 			const priorityArea = document.getElementById('priorityArea').value;
-			let areaScore = 0;
-			switch (priorityArea) {
-				case "KV1": areaScore = 0.75; break;
-				case "2NT": areaScore = 0.5; break;
-				case "KV2": areaScore = 0.25; break;
-				case "KV3": areaScore = 0; break;
-			}
+			let areaScore = (priorityArea === "KV1") ? 0.75 : (priorityArea === "2NT") ? 0.5 :
+							(priorityArea === "KV2") ? 0.25 : 0;
 
 			// Tính điểm đối tượng ưu tiên
 			const priorityObject = document.getElementById('priorityObject').value;
-			let objectScore = 0;
-			if (["DT1", "DT2", "DT3", "DT4"].includes(priorityObject)) {
-				objectScore = 2;
-			} else if (["DT5", "DT6", "DT7"].includes(priorityObject)) {
-				objectScore = 1.5;
-			}
+			let objectScore = (["DT1", "DT2", "DT3", "DT4"].includes(priorityObject)) ? 2 :
+							  (["DT5", "DT6", "DT7"].includes(priorityObject)) ? 1.5 : 0;
 
-			// Tổng điểm ưu tiên
 			const totalPriorityScore = areaScore + objectScore;
 
 			// Tính điểm các nhóm theo tổ hợp môn
 			const groups = {
-			group1: [
-				["anh", "toan", "ly"],
-				["anh", "toan", "van"],
-				["anh", "toan", "hoa"],
-				["anh", "toan", "su"],
-				["anh", "toan", "dia"],
-				["anh", "van", "ly"],
-				["anh", "van", "su"],
-				["anh", "van", "dia"],
-				["anh", "van", "gdktpl"],
-				["anh", "toan", "gdktpl"],
-				["anh", "toan", "cn"],
-				["anh", "toan", "tin"]
-			],
-			group2: [
-				["toan", "ly", "hoa"],
-				["toan", "ly", "anh"],
-				["toan", "ly", "su"],
-				["toan", "ly", "dia"],
-				["toan", "ly", "cn"],
-				["toan", "ly", "tin"],
-				["toan", "ly", "gdktpl"],
-				["toan", "ly", "van"],
-				["toan", "van", "dia"],
-				["toan", "van", "su"],
-				["toan", "van", "gdktpl"],
-				["toan", "van", "tin"],
-				["toan", "van", "cn"],
-				["toan", "anh", "van"],
-				["toan", "anh", "dia"],
-				["toan", "anh", "su"],
-				["toan", "anh", "gdktpl"],
-				["toan", "anh", "cn"],
-				["toan", "anh", "tin"]
-			],
-			group3: [
-				["toan", "ly", "hoa"],
-				["toan", "ly", "anh"],
-				["toan", "ly", "su"],
-				["toan", "ly", "cn"],
-				["toan", "ly", "tin"],
-				["toan", "ly", "gdktpl"],
-				["toan", "ly", "van"],
-				["toan", "ly", "sinh"],
-				["toan", "hoa", "sinh"],
-				["toan", "hoa", "cn"],
-				["toan", "hoa", "tin"],
-				["toan", "anh", "van"],
-				["toan", "hoa", "anh"],
-				["toan", "hoa", "van"],
-				["toan", "cn", "anh"],
-				["toan", "cn", "sinh"],
-				["toan", "cn", "van"],
-				["toan", "tin", "anh"],
-				["toan", "tin", "cn"],
-				["toan", "tin", "sinh"],
-				["toan", "tin", "van"]
-			],
-			group4: [
-				["van", "su", "dia"],
-				["van", "su", "gdktpl"],
-				["van", "su", "anh"],
-				["van", "su", "toan"],
-				["van", "su", "ly"],
-				["van", "dia", "toan"],
-				["van", "dia", "gdktpl"],
-				["van", "dia", "anh"],
-				["van", "dia", "ly"],
-				["van", "toan", "ly"],
-				["van", "toan", "gdktpl"],
-				["van", "anh", "toan"],
-				["van", "anh", "ly"],
-				["van", "anh", "gdktpl"],
-				["van", "anh", "tin"],
-				["van", "anh", "cn"]
-			]
-		};
+				group1: [
+					["anh", "toan", "ly"],
+					["anh", "toan", "van"],
+					["anh", "toan", "hoa"],
+					["anh", "toan", "su"],
+					["anh", "toan", "dia"],
+					["anh", "van", "ly"],
+					["anh", "van", "su"],
+					["anh", "van", "dia"],
+					["anh", "van", "gdktpl"],
+					["anh", "toan", "gdktpl"],
+					["anh", "toan", "cn"],
+					["anh", "toan", "tin"]
+				],
+				group2: [
+					["toan", "ly", "hoa"],
+					["toan", "ly", "anh"],
+					["toan", "ly", "su"],
+					["toan", "ly", "dia"],
+					["toan", "ly", "cn"],
+					["toan", "ly", "tin"],
+					["toan", "ly", "gdktpl"],
+					["toan", "ly", "van"],
+					["toan", "van", "dia"],
+					["toan", "van", "su"],
+					["toan", "van", "gdktpl"],
+					["toan", "van", "tin"],
+					["toan", "van", "cn"],
+					["toan", "anh", "van"],
+					["toan", "anh", "dia"],
+					["toan", "anh", "su"],
+					["toan", "anh", "gdktpl"],
+					["toan", "anh", "cn"],
+					["toan", "anh", "tin"]
+				],
+				group3: [
+					["toan", "ly", "hoa"],
+					["toan", "ly", "anh"],
+					["toan", "ly", "su"],
+					["toan", "ly", "cn"],
+					["toan", "ly", "tin"],
+					["toan", "ly", "gdktpl"],
+					["toan", "ly", "van"],
+					["toan", "ly", "sinh"],
+					["toan", "hoa", "sinh"],
+					["toan", "hoa", "cn"],
+					["toan", "hoa", "tin"],
+					["toan", "anh", "van"],
+					["toan", "hoa", "anh"],
+					["toan", "hoa", "van"],
+					["toan", "cn", "anh"],
+					["toan", "cn", "sinh"],
+					["toan", "cn", "van"],
+					["toan", "tin", "anh"],
+					["toan", "tin", "cn"],
+					["toan", "tin", "sinh"],
+					["toan", "tin", "van"]
+				],
+				group4: [
+					["van", "su", "dia"],
+					["van", "su", "gdktpl"],
+					["van", "su", "anh"],
+					["van", "su", "toan"],
+					["van", "su", "ly"],
+					["van", "dia", "toan"],
+					["van", "dia", "gdktpl"],
+					["van", "dia", "anh"],
+					["van", "dia", "ly"],
+					["van", "toan", "ly"],
+					["van", "toan", "gdktpl"],
+					["van", "anh", "toan"],
+					["van", "anh", "ly"],
+					["van", "anh", "gdktpl"],
+					["van", "anh", "tin"],
+					["van", "anh", "cn"]
+				]
+			};
 
-			const calculateGroupScores = (groups, subjects, isNamDinh, totalPriorityScore) => {
+			const calculateGroupScores = (groups, subjects, isNamDinh, totalPriorityScore, englishBonus) => {
 				const bonus = isNamDinh ? 2.5 : 0;
 
 				const calculateScore = (combination) => {
@@ -329,28 +372,95 @@
 						? ((30 - baseScore) / 7.5) * totalPriorityScore 
 						: totalPriorityScore;
 
-					groupScores[group] = baseScore + priorityBonus;
+					// Cộng điểm khuyến khích từ chứng chỉ tiếng Anh
+					groupScores[group] = baseScore + priorityBonus + englishBonus;
 				});
 
 				return groupScores;
 			};
 
+			// Nhận điểm khuyến khích từ chứng chỉ tiếng Anh
+			const selectedScore = document.getElementById("certificateScore").value;
+			const conversionTable = {
+				"7.0": { convertedScore: 10, bonus: 0.5 },
+				"6.5": { convertedScore: 9.5, bonus: 0.4 },
+				"6.0": { convertedScore: 9.0, bonus: 0.3 },
+				"5.5": { convertedScore: 8.5, bonus: 0.2 },
+				"5.0": { convertedScore: 8.0, bonus: 0.1 },
+				"94": { convertedScore: 10, bonus: 0.5 },
+				"79": { convertedScore: 9.5, bonus: 0.4 },
+				"60": { convertedScore: 9.0, bonus: 0.3 },
+				"46": { convertedScore: 8.5, bonus: 0.2 },
+				"30": { convertedScore: 8.0, bonus: 0.1 },
+				"985": { convertedScore: 10, bonus: 0.5 },
+				"940": { convertedScore: 9.5, bonus: 0.4 },
+				"860": { convertedScore: 9.0, bonus: 0.3 },
+				"785": { convertedScore: 8.5, bonus: 0.2 },
+				"550": { convertedScore: 8.0, bonus: 0.1 }
+			};
+			const englishBonus = conversionTable[selectedScore]?.bonus || 0;
+
 			// Tính điểm cho từng nhóm
-			const groupScores = calculateGroupScores(groups, subjects, isNamDinh, totalPriorityScore);
+			const groupScores = calculateGroupScores(groups, subjects, isNamDinh, totalPriorityScore, englishBonus);
 
 			// Hiển thị kết quả
 			document.getElementById('group1').textContent = groupScores.group1.toFixed(2);
 			document.getElementById('group2').textContent = groupScores.group2.toFixed(2);
 			document.getElementById('group3').textContent = groupScores.group3.toFixed(2);
 			document.getElementById('group4').textContent = groupScores.group4.toFixed(2);
-			document.getElementById('resultScores').style.display = 'flex';
 
-			
+			alert(`Tổng điểm xét tuyển:\nNhóm 1: ${groupScores.group1.toFixed(2)}\nNhóm 2: ${groupScores.group2.toFixed(2)}\nNhóm 3: ${groupScores.group3.toFixed(2)}\nNhóm 4: ${groupScores.group4.toFixed(2)}`);
 		}
 		
 		function resetForm() {
 			// Tải lại toàn bộ trang
 			location.reload();
+		}
+		
+		function updateEnglishOptions() {
+			const certificate = document.getElementById("englishCertificate").value;
+			const scoreSelect = document.getElementById("certificateScore");
+			const scoreBox = document.getElementById("certificateScoreBox"); // Thẻ div chứa combobox chọn mức điểm
+
+			// Nếu không chọn chứng chỉ, ẩn combobox chọn mức điểm
+			if (certificate === "none") {
+				scoreBox.style.display = "none";
+				scoreSelect.innerHTML = `<option value="none">--Chọn chứng chỉ trước--</option>`;
+				return;
+			}
+
+			// Hiển thị combobox chọn mức điểm
+			scoreBox.style.display = "block";
+			scoreSelect.innerHTML = ""; // Xóa tất cả tùy chọn cũ
+
+			if (certificate === "ielts") {
+				scoreSelect.innerHTML = `
+					<option value="none">---Chọn mức điểm---</option>
+					<option value="7.0">7.0 trở lên</option>
+					<option value="6.5">6.5</option>
+					<option value="6.0">6.0</option>
+					<option value="5.5">5.5</option>
+					<option value="5.0">5.0</option>
+				`;
+			} else if (certificate === "toefl") {
+				scoreSelect.innerHTML = `
+					<option value="none">---Chọn mức điểm---</option>
+					<option value="94">94 trở lên</option>
+					<option value="79">Từ 79 - 93</option>
+					<option value="60">Từ 60 - 78</option>
+					<option value="46">Từ 46 - 59</option>
+					<option value="30">Từ 30 - 45</option>
+				`;
+			} else if (certificate === "toeic") {
+				scoreSelect.innerHTML = `
+					<option value="none">---Chọn mức điểm---</option>
+					<option value="985">Trên 985/200/200</option>
+					<option value="940">Trên 940/170/170</option>
+					<option value="860">Trên 860/165/165</option>
+					<option value="785">Trên 785/160/160</option>
+					<option value="550">Trên 550/120/120</option>
+				`;
+			}
 		}
     </script>
 </body>
