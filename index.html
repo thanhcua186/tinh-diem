@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TUYỂN SINH UNETI - TÍNH ĐIỂM ĐĂNG KÝ XÉT TUYỂN</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .header-banner {
+            background-image: url('https://media.uneti.edu.vn/Media/1_TH1083/FolderFunc/202504/Images/banner-web-20250416115933-e.jpg');
+            background-size: contain; /* Đảm bảo hình ảnh hiển thị toàn bộ */
+            background-repeat: no-repeat; /* Không lặp lại hình ảnh */
+            background-position: center; /* Căn giữa hình ảnh */
+            height: auto; /* Chiều cao tự động để phù hợp với chiều rộng */
+            width: 100%; /* Chiều rộng toàn màn hình */
+        }
+        .header-banner img {
+            width: 100%; /* Đảm bảo hình ảnh chiếm hết chiều rộng */
+            height: auto; /* Tỉ lệ hình ảnh được giữ nguyên */
+        }
+
+        .header-banner h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        .container {
+            margin-top: 30px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .result-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .result-box {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Banner -->
+  <header class="header-banner">
+        <img src="https://media.uneti.edu.vn/Media/1_TH1083/FolderFunc/202504/Images/banner-web-20250416115933-e.jpg" alt="Banner Đại Học">
+    </header>
+
+
+    <div class="container">
+        <h2 class="text-center mb-4">TÍNH ĐIỂM ĐĂNG KÝ XÉT TUYỂN NĂM 2025 (THAM KHẢO)</h2>
+        <form>
+            <!-- Hình thức xét tuyển -->
+            <div class="mb-3">
+                <label for="selectionType" class="form-label">Chọn hình thức xét tuyển</label>
+                <select id="selectionType" class="form-select" onchange="updateForm()">
+                    <option value="thiTHPT">Xét điểm thi THPT</option>
+                    <option value="hocBa">Xét điểm học bạ</option>
+                </select>
+            </div>
+
+            <!-- Khu vực ưu tiên -->
+            <div class="mb-3">
+                <label for="priorityArea" class="form-label">Chọn khu vực ưu tiên</label>
+                <select id="priorityArea" class="form-select">
+                    <option value="KV3">Khu vực 3</option>
+                    <option value="KV2">Khu vực 2</option>
+					<option value="2NT">Khu vực 2 - Nông thôn</option>
+					<option value="KV1">Khu vực 1</option>
+                </select>
+            </div>
+			<!-- Khu vực ưu tiên -->
+            <div class="mb-3">
+                <label for="priorityObject" class="form-label">Chọn Đối tượng ưu tiên</label>
+                <select id="priorityObject" class="form-select">
+                    <option value="DT0">----Không-----</option>
+					<option value="DT1">Đối tượng 1</option>
+					<option value="DT2">Đối tượng 2</option>
+					<option value="DT3">Đối tượng 3</option>
+					<option value="DT4">Đối tượng 4</option>
+					<option value="DT5">Đối tượng 5</option>
+					<option value="DT6">Đối tượng 6</option>
+					<option value="DT7">Đối tượng 7</option>
+                </select>
+            </div>
+
+            <!-- Nhập điểm các môn học -->
+            <div id="subjectScores" class="mb-3">
+                <label class="form-label"><strong>Nhập điểm thi THPT (Nếu điểm lẻ thì nhập dấu phẩy (,) VD: 8,5 hoặc nhập 85)</strong></label>
+                <div class="row">
+                    <div class="col-md-4"><input type="number"  id="toan" class="form-control mb-2" placeholder="Toán"></div>
+                    <div class="col-md-4"><input type="number" id="ly" class="form-control mb-2" placeholder="Vật lý"></div>
+                    <div class="col-md-4"><input type="number" id="hoa" class="form-control mb-2" placeholder="Hóa học"></div>
+                    <div class="col-md-4"><input type="number" id="sinh" class="form-control mb-2" placeholder="Sinh học"></div>
+                    <div class="col-md-4"><input type="number" id="van" class="form-control mb-2" placeholder="Ngữ văn"></div>
+                    <div class="col-md-4"><input type="number" id="su" class="form-control mb-2" placeholder="Lịch sử"></div>
+                    <div class="col-md-4"><input type="number" id="dia" class="form-control mb-2" placeholder="Địa lý"></div>
+                    <div class="col-md-4"><input type="number" id="anh" class="form-control mb-2" placeholder="Tiếng Anh"></div>
+                    <div class="col-md-4"><input type="number" id="cn" class="form-control mb-2" placeholder="Công nghệ"></div>
+                    <div class="col-md-4"><input type="number" id="tin" class="form-control mb-2" placeholder="Tin học"></div>
+                    <div class="col-md-4"><input type="number" id="gdktpl" class="form-control mb-2" placeholder="GDKT&PL"></div>
+                </div>
+            </div>
+
+            <!-- Nhập điểm đánh giá tư duy hoặc năng lực
+            <div id="evaluationScores" class="mb-3" style="display: none;">
+                <label class="form-label">Nhập điểm đánh giá</label>
+                <input type="number" class="form-control" placeholder="Nhập điểm">
+            </div>  -->
+	
+            <!-- Nút tính điểm -->
+            <div class="text-center mb-3">
+                <button type="button" class="btn btn-primary" onclick="calculate()">Tính Điểm</button>
+				<button type="button" class="btn btn-warning" onclick="resetForm()">Reset</button>
+            </div>
+        </form>
+
+        <!-- Kết quả -->
+        <div id="resultScores" class="result-row">
+            <div class="result-box">Điểm cao nhất nhóm 1: <span id="group1"></span></div>
+            <div class="result-box">Điểm cao nhất nhóm 2: <span id="group2"></span></div>
+            <div class="result-box">Điểm cao nhất nhóm 3: <span id="group3"></span></div>
+            <div class="result-box">Điểm cao nhất nhóm 4: <span id="group4"></span></div>
+        </div>
+        <div id="convertedScore" class="text-center" style="display: none;">
+            <p>Điểm quy đổi: <span id="converted"></span></p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+		document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', function () {
+                let value = parseFloat(this.value);
+
+                if (isNaN(value) || value < 0) {
+                    this.value = 0; // Nếu giá trị nhỏ hơn 0, đặt về 0
+                } else if (value > 10) {
+                    this.value = (value / 10).toFixed(2); // Nếu lớn hơn 10, đặt về 10
+                }
+            });
+        });
+
+	
+		function updateForm() {
+			const selectionType = document.getElementById('selectionType').value;
+			const subjectScores = document.getElementById('subjectScores');
+			const evaluationScores = document.getElementById('evaluationScores');
+			const resultScores = document.getElementById('resultScores');
+			const convertedScore = document.getElementById('convertedScore');
+
+			// Chọn nhãn trong phần nhập điểm
+			const subjectLabel = document.querySelector('#subjectScores .form-label');
+
+			if (selectionType === 'thiTHPT') {
+				// Nếu là xét điểm thi THPT, hiển thị label in đậm: "Nhập điểm thi THPT "
+				subjectLabel.innerHTML = "<strong>Nhập điểm thi THPT (Nếu điểm lẻ thì nhập dấu phẩy (,) VD: 8,5 hoặc nhập 85)</strong>";
+				subjectScores.style.display = 'block';
+				evaluationScores.style.display = 'none';
+				resultScores.style.display = 'flex';
+				convertedScore.style.display = 'none';
+			} else if (selectionType === 'hocBa') {
+				// Nếu là xét học bạ, hiển thị label in đậm: "Nhập điểm học bạ (Điểm tổng kết năm lớp 12 - Nếu điểm lẻ thì nhập dấu phẩy (,) VD: 8,5 hoặc nhập 85)"
+				subjectLabel.innerHTML = "<strong>Nhập điểm học bạ (Điểm tổng kết năm lớp 12)</strong>";
+				subjectScores.style.display = 'block';
+				evaluationScores.style.display = 'none';
+				resultScores.style.display = 'flex';
+				convertedScore.style.display = 'none';
+			}
+		}
+	
+		
+		
+
+		// Ví dụ sử dụng
+		function calculate() {
+			const isNamDinh = document.getElementById('registrationLocation')?.value === "NamDinh";
+
+			// Lấy điểm từng môn
+			const subjects = {
+				toan: parseFloat(document.getElementById('toan').value) || 0,
+				ly: parseFloat(document.getElementById('ly').value) || 0,
+				hoa: parseFloat(document.getElementById('hoa').value) || 0,
+				sinh: parseFloat(document.getElementById('sinh').value) || 0,
+				van: parseFloat(document.getElementById('van').value) || 0,
+				su: parseFloat(document.getElementById('su').value) || 0,
+				dia: parseFloat(document.getElementById('dia').value) || 0,
+				anh: parseFloat(document.getElementById('anh').value) || 0,
+				cn: parseFloat(document.getElementById('cn').value) || 0,
+				tin: parseFloat(document.getElementById('tin').value) || 0,
+				gdktpl: parseFloat(document.getElementById('gdktpl').value) || 0
+			};
+
+			// Tính điểm khu vực ưu tiên
+			const priorityArea = document.getElementById('priorityArea').value;
+			let areaScore = 0;
+			switch (priorityArea) {
+				case "KV1": areaScore = 0.75; break;
+				case "2NT": areaScore = 0.5; break;
+				case "KV2": areaScore = 0.25; break;
+				case "KV3": areaScore = 0; break;
+			}
+
+			// Tính điểm đối tượng ưu tiên
+			const priorityObject = document.getElementById('priorityObject').value;
+			let objectScore = 0;
+			if (["DT1", "DT2", "DT3", "DT4"].includes(priorityObject)) {
+				objectScore = 2;
+			} else if (["DT5", "DT6", "DT7"].includes(priorityObject)) {
+				objectScore = 1.5;
+			}
+
+			// Tổng điểm ưu tiên
+			const totalPriorityScore = areaScore + objectScore;
+
+			// Tính điểm các nhóm theo tổ hợp môn
+			const groups = {
+			group1: [
+				["anh", "toan", "ly"],
+				["anh", "toan", "van"],
+				["anh", "toan", "hoa"],
+				["anh", "toan", "su"],
+				["anh", "toan", "dia"],
+				["anh", "van", "ly"],
+				["anh", "van", "su"],
+				["anh", "van", "dia"],
+				["anh", "van", "gdktpl"],
+				["anh", "toan", "gdktpl"],
+				["anh", "toan", "cn"],
+				["anh", "toan", "tin"]
+			],
+			group2: [
+				["toan", "ly", "hoa"],
+				["toan", "ly", "anh"],
+				["toan", "ly", "su"],
+				["toan", "ly", "dia"],
+				["toan", "ly", "cn"],
+				["toan", "ly", "tin"],
+				["toan", "ly", "gdktpl"],
+				["toan", "ly", "van"],
+				["toan", "van", "dia"],
+				["toan", "van", "su"],
+				["toan", "van", "gdktpl"],
+				["toan", "van", "tin"],
+				["toan", "van", "cn"],
+				["toan", "anh", "van"],
+				["toan", "anh", "dia"],
+				["toan", "anh", "su"],
+				["toan", "anh", "gdktpl"],
+				["toan", "anh", "cn"],
+				["toan", "anh", "tin"]
+			],
+			group3: [
+				["toan", "ly", "hoa"],
+				["toan", "ly", "anh"],
+				["toan", "ly", "su"],
+				["toan", "ly", "cn"],
+				["toan", "ly", "tin"],
+				["toan", "ly", "gdktpl"],
+				["toan", "ly", "van"],
+				["toan", "ly", "sinh"],
+				["toan", "hoa", "sinh"],
+				["toan", "hoa", "cn"],
+				["toan", "hoa", "tin"],
+				["toan", "anh", "van"],
+				["toan", "hoa", "anh"],
+				["toan", "hoa", "van"],
+				["toan", "cn", "anh"],
+				["toan", "cn", "sinh"],
+				["toan", "cn", "van"],
+				["toan", "tin", "anh"],
+				["toan", "tin", "cn"],
+				["toan", "tin", "sinh"],
+				["toan", "tin", "van"]
+			],
+			group4: [
+				["van", "su", "dia"],
+				["van", "su", "gdktpl"],
+				["van", "su", "anh"],
+				["van", "su", "toan"],
+				["van", "su", "ly"],
+				["van", "dia", "toan"],
+				["van", "dia", "gdktpl"],
+				["van", "dia", "anh"],
+				["van", "dia", "ly"],
+				["van", "toan", "ly"],
+				["van", "toan", "gdktpl"],
+				["van", "anh", "toan"],
+				["van", "anh", "ly"],
+				["van", "anh", "gdktpl"],
+				["van", "anh", "tin"],
+				["van", "anh", "cn"]
+			]
+		};
+
+			const calculateGroupScores = (groups, subjects, isNamDinh, totalPriorityScore) => {
+				const bonus = isNamDinh ? 2.5 : 0;
+
+				const calculateScore = (combination) => {
+					return ((subjects[combination[0]] * 5 +
+							 subjects[combination[1]] * 3 +
+							 subjects[combination[2]] * 2) * 3 / 10) + bonus;
+				};
+
+				const groupScores = {};
+				Object.keys(groups).forEach(group => {
+					const baseScore = Math.max(...groups[group].map(combination => calculateScore(combination)));
+
+					// Áp dụng công thức tính điểm ưu tiên
+					const priorityBonus = baseScore > 22.5 
+						? ((30 - baseScore) / 7.5) * totalPriorityScore 
+						: totalPriorityScore;
+
+					groupScores[group] = baseScore + priorityBonus;
+				});
+
+				return groupScores;
+			};
+
+			// Tính điểm cho từng nhóm
+			const groupScores = calculateGroupScores(groups, subjects, isNamDinh, totalPriorityScore);
+
+			// Hiển thị kết quả
+			document.getElementById('group1').textContent = groupScores.group1.toFixed(2);
+			document.getElementById('group2').textContent = groupScores.group2.toFixed(2);
+			document.getElementById('group3').textContent = groupScores.group3.toFixed(2);
+			document.getElementById('group4').textContent = groupScores.group4.toFixed(2);
+			document.getElementById('resultScores').style.display = 'flex';
+
+			
+		}
+		
+		function resetForm() {
+			// Tải lại toàn bộ trang
+			location.reload();
+		}
+    </script>
+</body>
+</html>
